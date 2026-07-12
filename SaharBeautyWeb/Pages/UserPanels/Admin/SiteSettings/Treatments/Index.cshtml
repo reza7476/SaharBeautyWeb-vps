@@ -1,0 +1,40 @@
+﻿@page "{handler?}"
+@model SaharBeautyWeb.Pages.UserPanels.Admin.SiteSettings.Treatments.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+    ViewData["ActiveMenu"] = "Treatments";
+}
+<link href="~/layout/admin/assets/css/pages/treatments/treatmentstyle.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="treatments-card">
+            <div class="treatments-header">
+                <h4>لیست خدمات</h4>
+                <button type="button"
+                        class="btn btn-primary waves-effect waves-light"
+                        id="add-treatment-btn">
+                    <i class="bx bx-plus me-1"></i>
+                    افزودن خدمات
+                </button>
+            </div>
+
+            <div class="treatments-list">
+                @await Html.PartialAsync("_TreatmentsList", Model.ListModel)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sitesettings/treatments/treatmentsjquery.js"></script>
+    
+    <script>
+
+        var addTreatmentPartial = '@Url.Page("Index", "AddTreatmentPartial")';
+        var addTreatment = '@Url.Page("Index", "AddTreatment")';
+        var editTreatmentPartial = '@Url.Page("Index", "EditTreatmentPartial")';
+        var editTreatment = '@Url.Page("Index", "EditTreatment")';
+        var deleteImage = '@Url.Page("Index", "DeleteImage")';
+        var addImage = '@Url.Page("Index", "AddImage")';
+    </script>
+}

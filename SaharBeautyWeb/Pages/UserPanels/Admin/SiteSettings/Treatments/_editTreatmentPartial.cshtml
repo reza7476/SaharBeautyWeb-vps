@@ -1,0 +1,152 @@
+﻿
+@using SaharBeautyWeb.Models.Entities.Treatments.Models
+@model TreatmentDetailsModel
+<link href="~/layout/admin/assets/css/pages/treatments/editstyle.css" rel="stylesheet" />
+<div class="row" style="display:block" id="edit-treatment">
+    <div class="col-12">
+        <div class="treatment-edit-card">
+            <div class="treatment-edit-card-header">
+                <h4 class="card-title">ویرایش خدمت</h4>
+            </div>
+
+            <div class="card-body">
+
+                <!-- فرم ویرایش عنوان و توضیحات -->
+                <form class="needs-validation treatment-edit-form"
+                      method="post"
+                      id="edit-treatment-title-description-form"
+                      asp-page="Index"
+                      asp-page-handler="EditTreatment"
+                      enctype="multipart/form-data">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">عنوان</label>
+                                <input type="text"
+                                       id="edit-treatment-title"
+                                       class="form-control"
+                                       asp-for="Title"
+                                       placeholder="لطفا یک عنوان را وارد نمایید"
+                                       value="@Model.Title" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">مدت زمان انجام </label>
+                                <input type="text"
+                                       id="edit-treatment-duration"
+                                       class="form-control"
+                                       asp-for="Duration"
+                                       placeholder="لطفا مدت زمان خدمت را وارد کنید"
+                                       value="@Model.Duration" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">قیمت به تومان </label>
+                                <input type="text"
+                                       id="edit-treatment-price"
+                                       class="form-control"
+                                       asp-for="Price"
+                                       placeholder="لطفا قیمت را وارد کنید"
+                                       value="@Model.Price" />
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">توضیحات</label>
+                                <textarea class="form-control"
+                                          id="edit-treatment-description"
+                                          asp-for="Description"
+                                          rows="5"
+                                          placeholder="توضیحات مربوط به خدمت">@Model.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+
+                    <div class="col-12">
+                        <button type="submit"
+                                class="btn btn-primary treatment-edit-btn col-12 edit-treatment-title-description">
+                            اعمال تغییرات
+                        </button>
+                    </div>
+                </form>
+
+                <hr />
+
+                <!-- فرم افزودن عکس جدید -->
+                <form class="needs-validation treatment-edit-form"
+                      method="post"
+                      id="add-treatment-image-form"
+                      asp-page="Index"
+                      asp-page-handler="AddTreatmentImage"
+                      enctype="multipart/form-data">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">افزودن تصویر جدید</label>
+                                <input type="file"
+                                       asp-for="AddMedia"
+                                       id=""
+                                       class="form-control add-treatment-image-input "
+                                       placeholder="یک عکس با فرمت مناسب انتخاب کنید (jpeg / jpg / png)" />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="mb-3 text-center">
+                                <img class="img-thumbnail preview-new-image-treatment"
+                                     alt="پیش‌نمایش عکس جدید"
+                                     width="200"
+                                     src=""
+                                     id=""
+                                     data-holder-rendered="true" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" asp-for="@Model.Id" id="treatmentId" value="@Model.Id" />
+
+                    <div class="col-12">
+                        <button type="submit"
+                                class="btn btn-success treatment-edit-btn col-12 add-edited-treatment-image"
+                                id-data="@Model.Id">
+                            افزودن عکس
+                        </button>
+                    </div>
+                </form>
+
+                <hr />
+
+                <!-- لیست تصاویر -->
+                <div class="treatment-edit-images">
+                    <div class="row">
+                        @foreach (var item in Model.Media)
+                        {
+                            <div class="col-md-6 mb-3 text-center">
+                                <img class="img-thumbnail"
+                                     alt="@item.ImageName"
+                                     width="200"
+                                     src="@item.URL"
+                                     data-holder-rendered="true" />
+                                <br />
+                                <button type="button"
+                                        class="btn btn-danger mt-2 delete-treatment-image-btn"
+                                        data-id="@item.Id">
+                                    حذف
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

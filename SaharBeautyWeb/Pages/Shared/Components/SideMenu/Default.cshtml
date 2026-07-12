@@ -1,0 +1,286 @@
+﻿@using SaharBeautyWeb.Services
+@model UserRoleModel
+@{
+    var userInfo = Model.FullName;
+}
+<aside id="sidebar" class="sidebar fixed top-0 right-0 h-full w-80 bg-white shadow-xl z-50 overflow-y-auto">
+
+    <!-- Sidebar Header -->
+    <div class="flex items-center justify-between p-6 border-b">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
+                @if (Model.ImageURL != null)
+                {
+                    <img src="@Model.ImageURL"
+                         alt="Profile"
+                         class="w-full h-full object-cover" />
+                }
+                else
+                {
+                    <i class="fas fa-user"></i>
+                }
+            </div>
+            <div>
+                <div class="font-bold">@Model.FullName</div>
+                @foreach (var role in Model.Roles)
+                {
+                    <div class="text-xs text-gray-500">@role</div>
+                }
+            </div>
+        </div>
+        <button id="close-sidebar" class="text-gray-500 hover:text-gray-700 md:hidden">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Menu -->
+    <nav class="p-4">
+
+        @* ------------------ CLIENT MENU ------------------ *@
+        @if (Model.Roles.Contains(SystemRole.Client))
+        {
+            <div class="mb-2">
+                <button class="menu-item w-full flex items-center gap-3 p-3 rounded-lg text-right
+                              @(ViewData["ActiveMenu"]?.ToString() == "Dashboard" ? "active bg-pink-100 font-bold" : "")"
+                        onclick="window.location='/UserPanels/Client/Index'">
+                    <i class="fas fa-gauge w-5"></i>
+                    <span>داشبورد</span>
+                </button>
+            </div>
+
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('reservations')">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-calendar-check w-5"></i>
+                        <span>رزرو و نوبت‌ها</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-reservations"></i>
+                </button>
+                <div id="submenu-reservations" class="submenu
+                     @(ViewData["ActiveMenu"]?.ToString() == "Reservations" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                     @(ViewData["ActiveMenu"]?.ToString() == "NewAppointment" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Client/Appointment/Index'">
+                        <i class="fas fa-calendar-plus text-xs ml-2"></i>
+                        رزرو نوبت جدید
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "MyAppointments" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Client/MyAppointments/Index'">
+                        <i class="fas fa-calendar-day text-xs ml-2"></i>
+                        لیست نوبت‌های من
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('profile')">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-user w-5"></i>
+                        <span>حساب کاربری</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-profile"></i>
+                </button>
+                <div id="submenu-profile" class="submenu
+                @(ViewData["ActiveMenu"]?.ToString() == "Profile" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "Profile" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Client/Accounts/Index'">
+                        <i class="fas fa-user-pen text-xs ml-2"></i>
+                        پروفایل
+                    </button>
+                </div>
+            </div>
+        }
+
+        @* ------------------ ADMIN MENU ------------------ *@
+        @if (Model.Roles.Contains(SystemRole.Admin))
+        {
+            <div class="mb-2">
+                <button class="menu-item w-full flex items-center gap-3 p-3 rounded-lg text-right
+                @(ViewData["ActiveMenu"]?.ToString() == "Dashboard" ? "active bg-pink-100 font-bold" : "")"
+                        onclick="window.location='/UserPanels/Admin/Index'">
+                    <i class="fa-solid fa-gauge w-5"></i>
+                    <span>داشبورد</span>
+                </button>
+            </div>
+
+            @* Site Settings *@
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('SiteSetting')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-gear w-5"></i>
+                        <span>تنظیمات سایت</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-SiteSetting"></i>
+                </button>
+                <div id="submenu-SiteSetting" class="submenu
+                @(ViewData["ActiveMenu"]?.ToString() == "SiteSetting" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "Banners" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/SiteSettings/Banners/Index'">
+                        <i class="fa-solid fa-image text-xs ml-2"></i> بنر
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "WhyUs" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/SiteSettings/WhyUsSections/Index'">
+                        <i class="fa-solid fa-circle-question text-xs ml-2"></i> چرا ما
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "AboutUs" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/SiteSettings/AboutUs/Index'">
+                        <i class="fa-solid fa-info-circle text-xs ml-2"></i> درباره ما
+                    </button>
+                </div>
+            </div>
+
+            @* Services *@
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('services')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-spa w-5"></i>
+                        <span>سرویس ها</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-services"></i>
+                </button>
+                <div id="submenu-services" class="submenu
+                @(ViewData["ActiveMenu"]?.ToString() == "Services" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "Treatments" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/SiteSettings/Treatments/Index'">
+                        <i class="fa-solid fa-scissors text-xs ml-2"></i> خدمات
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "WeeklySchedules" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/WeeklySchedules/Index'">
+                        <i class="fa-solid fa-calendar-days text-xs ml-2"></i> زمان بندی هفتگی
+                    </button>
+                </div>
+            </div>
+
+            @* Users *@
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('users')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-users w-5"></i>
+                        <span>کاربران</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-users"></i>
+                </button>
+                <div id="submenu-users" class="submenu
+                    @(ViewData["ActiveMenu"]?.ToString() == "Users" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "UsersList" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Users/Index'">
+                        <i class="fa-solid fa-users text-xs ml-2"></i> لیست کاربران
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "AddClient" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/AddNewClient/Index'">
+                        <i class="fa-solid fa-user-plus text-xs ml-2"></i> ثبت مشتری جدید
+                    </button>
+                </div>
+            </div>
+
+            @* Reservations *@
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('reservations')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-calendar-check w-5"></i>
+                        <span>رزرو و نوبت‌ها</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-reservations"></i>
+                </button>
+                <div id="submenu-reservations" class="submenu
+                    @(ViewData["ActiveMenu"]?.ToString() == "Appointments" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "AllAppointments" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Appointments/Index'">
+                        <i class="fa-solid fa-calendar-check text-xs ml-2"></i> لیست نوبتها
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "TodayAppointments" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Appointments/TodayAppointments/Index'">
+                        <i class="fa-solid fa-sun text-xs ml-2"></i> لیست نوبتهای امروز
+                    </button>
+
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "PendingAppointments" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Appointments/PendingAppointments/Index'">
+                        <i class="fa-solid fa-sun text-xs ml-2"></i> لیست نوبتهای تایید نشده
+                    </button>
+
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "AddAppointment" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Appointments/AddAppointment/Index'">
+                        <i class="fa-solid fa-plus-circle text-xs ml-2"></i> ثبت نوبت جدید
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('sms-list')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-calendar-check w-5"></i>
+                        <span> پیام ها</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-sms-list"></i>
+                </button>
+                <div id="submenu-sms-list" class="submenu
+                    @(ViewData["ActiveMenu"]?.ToString() == "SMSList" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "SMSList" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/SMS-Logs/Index'">
+                        <i class="fa-solid fa-calendar-check text-xs ml-2"></i> لیست SMS ها
+                    </button>
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "CommentList" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Comments/Index'">
+                        <i class="fa-solid fa-calendar-check text-xs ml-2"></i> لیست نظرات
+                    </button>
+                </div>
+
+            </div>
+
+
+            @* Profile *@
+            <div class="mb-2">
+                <button class="menu-header flex items-center justify-between w-full p-3 text-gray-700 font-bold"
+                        onclick="toggleSubmenu('profile')">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-id-badge w-5"></i>
+                        <span>حساب کاربری</span>
+                    </div>
+                    <i class="fas fa-chevron-down transform transition-transform" id="icon-profile"></i>
+                </button>
+                <div id="submenu-profile" class="submenu
+                @(ViewData["ActiveMenu"]?.ToString() == "Profile" ? "open" : "")">
+                    <button class="submenu-item w-full text-right p-3 pr-12 text-sm text-gray-600
+                    @(ViewData["ActiveMenu"]?.ToString() == "Profile" ? "active bg-pink-100 font-bold" : "")"
+                            onclick="window.location='/UserPanels/Admin/Accounts/Index'">
+                        <i class="fa-solid fa-id-badge text-xs ml-2"></i> پروفایل
+                    </button>
+                </div>
+            </div>
+        }
+
+        @* Logout for all users *@
+        <div class="mb-2 mt-8 pt-4 border-t">
+            <button class="menu-item w-full flex items-center gap-3 p-3 rounded-lg text-right text-red-600 hover:bg-red-50"
+                    onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket w-5"></i>
+                <span>خروج از حساب</span>
+            </button>
+        </div>
+
+    </nav>
+</aside>
+
+

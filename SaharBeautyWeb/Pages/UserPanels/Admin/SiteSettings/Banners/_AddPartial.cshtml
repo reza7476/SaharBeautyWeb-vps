@@ -1,0 +1,43 @@
+﻿@using SaharBeautyWeb.Models.Entities.Banners.Management.Models
+@model AddBannerModel
+
+<link href="~/layout/admin/assets/css/pages/banners/editstyle.css" rel="stylesheet" />
+
+<div class="banner-form mt-3">
+    <h5 class="mb-3 fw-bold text-center">ثبت بنر جدید</h5>
+
+    <form id="add-banner-form"
+          method="post"
+          asp-page="Index"
+          asp-page-handler="CreateBanner"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">عنوان بنر</label>
+            <input type="text" asp-for="Title" id="add-banner-title"
+                   class="form-control"
+                   placeholder="مثلاً تخفیف ویژه تابستانی">
+            <span asp-validation-for="Title" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Image" class="form-label ">انتخاب تصویر</label>
+            <input type="file" asp-for="Image" id=""
+                   class="form-control get-banner-image"
+                   accept=".jpg,.jpeg,.png,.webp">
+            <span asp-validation-for="Image" class="text-danger small"></span>
+        </div>
+
+        <div class="text-center mb-3 " id="preview-container">
+            <div class="image-box ">
+                <img src="" class="preview-new-banner-image" id="" alt="پیش‌نمایش تصویر" />
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="createBanner">ثبت</button>
+        </div>
+    </form>
+</div>

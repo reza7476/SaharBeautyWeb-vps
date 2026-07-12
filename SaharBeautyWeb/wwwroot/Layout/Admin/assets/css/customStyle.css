@@ -1,0 +1,82 @@
+﻿
+html {
+    font-size: 17px ; /* مقدار پیشنهادی */
+}
+
+html, body, body * {
+    font-family: "IRANYekan", sans-serif ;
+}
+
+.multiline-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* حداکثر تعداد خطوط */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    max-width: 200px; /* عرض دلخواه */
+}
+
+.text-break {
+    max-width:120px;
+    white-space: normal !important;
+    overflow-wrap:anywhere;
+    word-wrap: break-word; 
+    word-break: break-word;
+}
+/* red animated border */
+/* glowing red animation */
+@keyframes red-glow {
+    0% {
+        box-shadow: 0 0 5px red;
+    }
+
+    50% {
+        box-shadow: 0 0 15px red;
+    }
+
+    100% {
+        box-shadow: 0 0 5px red;
+    }
+}
+
+.input-error {
+    border: 2px solid red;
+    border-radius: 4px;
+    animation: red-glow 1s infinite;
+}
+.img-fixed-size {
+    width: 100%; /* ریسپانسیو */
+    max-width: 400px; /* حداکثر ۴۰۰ پیکسل */
+    height: 250px;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 4px;
+    display: block; /* برای جلوگیری از رفتار inline */
+    margin: 0 auto; /* وسط‌چین شدن تصویر */
+}
+
+@media (max-width: 576px) {
+    .img-fixed-size {
+        height: 180px; /* ارتفاع کمتر تا توی موبایل جمع‌وجورتر باشه */
+    }
+}
+
+.spinner {
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-left: 8px;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

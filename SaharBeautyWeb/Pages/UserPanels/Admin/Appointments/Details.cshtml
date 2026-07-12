@@ -1,0 +1,92 @@
+﻿@page "{handle?}"
+@using SaharBeautyWeb.Models.Entities.Appointments.Enums
+@model SaharBeautyWeb.Pages.UserPanels.Admin.Appointments.DetailsModel
+@{
+    Layout = "_UserPanelLayout";
+    ViewData["Title"] = "جزئیات نوبت";
+}
+
+<link href="~/layout/admin/assets/css/pages/appointments/appointment-details.css" rel="stylesheet" />
+@if (Model.AppointmentDetails != null)
+{
+    
+<div class="details-container">
+    <h1 class="page-title">جزئیات نوبت</h1>
+
+    <div class="details-card">
+        <div class="detail-row">
+            <span class="detail-label">عنوان خدمت:</span>
+            <span class="detail-value">@Model.AppointmentDetails.TreatmentTitle</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">نام مشتری:</span>
+            <span class="detail-value">@($"{Model.AppointmentDetails.ClientName} {Model.AppointmentDetails.ClientLastName}")</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">شماره تماس:</span>
+            <span class="detail-value">@Model.AppointmentDetails.ClientMobile</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">تاریخ نوبت:</span>
+            <span class="detail-value">@Model.AppointmentDetails.Date</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">روز هفته:</span>
+            <span class="detail-value">@Model.AppointmentDetails.Day</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">زمان شروع:</span>
+            <span class="detail-value">@Model.AppointmentDetails.StartTime.ToString("HH:mm")</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">زمان پایان:</span>
+            <span class="detail-value">@Model.AppointmentDetails.EndTime.ToString("HH:mm")</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">مدت زمان:</span>
+            <span class="detail-value">@Model.AppointmentDetails.Duration دقیقه</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">قیمت:</span>
+            <span class="detail-value">@Model.AppointmentDetails.Price تومان</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">وضعیت:</span>
+            <span class="detail-value status-@Model.AppointmentDetails.StatusString">
+                @Model.AppointmentDetails.StatusString
+            </span>
+        </div>
+      
+        <div class="detail-row">
+            <span class="detail-label">تغییر وضعیت:</span>
+            <select id="status-dropdown" data-id="@Model.AppointmentDetails.Id" class="status-dropdown">
+                <option value="" selected> --</option>
+                <option value="@AppointmentStatus.Approved">تایید </option>
+                <option value="@AppointmentStatus.Cancelled">لغو </option>
+                <option value="@AppointmentStatus.Completed">انجام شد </option>
+                <option value="@AppointmentStatus.NoShow">عدم حضور </option>
+            </select>
+        </div>
+
+
+        <div class="button-group">
+            <a href=@(TempData["ReturnUrl"]) class="btn-back">بازگشت</a>
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    <script>
+        var changeStatus = '@Url.Page("Details","ChangeStatus")';
+    </script>
+    <script src="~/layout/admin/assets/js/pages/userpanels/admin/appointments/appointment.js"></script>
+}

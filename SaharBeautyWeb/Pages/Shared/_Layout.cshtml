@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سالن زیبایی شایسته</title>
+    <!-- CSS اصلی -->
+    <link rel="stylesheet" href="~/css/landing.css">
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container flex justify-between items-center">
+            <div class="logo">سالن زیبایی شایسته</div>
+
+            <!-- دکمه همبرگر موبایل -->
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-desktop hidden md:flex gap-4">
+                <a href="#home">خانه</a>
+                <a href="#services">خدمات</a>
+                <a href="#about">درباره ما</a>
+                <a href="#treatment-gallery-containers">گالری</a>
+                <a href="#client-comments-container">نظرات</a>
+                <a href="#contact">تماس با ما</a>
+                <a href="Auth/Login">ورود</a>
+            </nav>
+
+        </div>
+
+        <!-- منوی موبایل -->
+        <div id="mobile-menu" class="hidden flex-col gap-2 p-4 bg-white shadow-md">
+            <a href="#home">خانه</a>
+            <a href="#services">خدمات</a>
+            <a href="#about">درباره ما</a>
+            <a href="#treatment-gallery-containers">گالری</a>
+            <a href="#client-comments-container">نظرات</a>
+            <a href="#contact">تماس با ما</a>
+            <a href="Auth/Login">ورود</a>
+        </div>
+    </header>
+    
+    @RenderBody()
+
+
+    <!-- Footer Section -->
+    
+    <!-- Footer -->
+    <footer class="py-6 text-center bg-gray-100">
+        <p>© ۱۴۰۳ سالن زیبایی شایسته. تمامی حقوق محفوظ است.</p>
+    </footer>
+
+    <script src="~/js/landing.js"></script>
+</body>
+</html>

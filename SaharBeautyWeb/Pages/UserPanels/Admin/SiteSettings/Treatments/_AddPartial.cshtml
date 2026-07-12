@@ -1,0 +1,76 @@
+﻿
+
+@using SaharBeautyWeb.Models.Entities.Treatments.Dtos
+@model AddTreatmentModel
+<link href="~/layout/admin/assets/css/pages/treatments/addstyle.css" rel="stylesheet" />
+<div class="treatment-form-wrapper" id="register-treatment">
+    <div class="treatment-card">
+        <div class="treatment-card-header">
+            <h4 class="treatment-card-title">ثبت خدمت</h4>
+        </div>
+        <div class="treatment-card-body">
+            <form id="add-treatment-form"
+                  method="post"
+                  asp-page="Index"
+                  asp-page-handler="AddTreatment"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <div class="treatment-form-group">
+                    <label class="form-label">عنوان</label>
+                    <input type="text"
+                           id="add-treatment-title"
+                           class="treatment-input"
+                           asp-for="Title"
+                           placeholder="عنوان خدمت را وارد کنید" />
+                </div>
+                <div class="treatment-form-group">
+                    <label class="form-label">مدت زمان به دقیقه(60:)</label>
+                    <input type="number"
+                           id="add-treatment-duration"
+                           class="treatment-input"
+                           asp-for="Duration"
+                           placeholder="مدت زمان خدمت را وارد کنید" />
+                </div>
+
+                <div class="treatment-form-group">
+                    <label class="form-label">قیمت به تومان</label>
+                    <input type="text"
+                           id="add-treatment-price"
+                           class="treatment-input"
+                           asp-for="Price"
+                           placeholder="قیمت خدمت را وارد کنید به تومان" />
+                </div>
+
+                <div class="treatment-form-group">
+                    <label class="treatment-label">توضیحات</label>
+                    <textarea id="add-treatment-description"
+                              class="treatment-textarea"
+                              asp-for="Description"
+                              rows="5"
+                              placeholder="توضیحات خدمت..."></textarea>
+                </div>
+
+                <div class="treatment-form-group">
+                    <label class="treatment-label">انتخاب تصویر</label>
+                    <input type="file"
+                           id=""
+                           class="treatment-input add-treatment-image-input"
+                           asp-for="Image" />
+                </div>
+
+                <div class="treatment-preview">
+                    <img src=""
+                         class="treatment-preview-img preview-new-image-treatment"
+                         alt="پیش‌نمایش تصویر" />
+                </div>
+
+                <button class="treatment-btn" type="submit" id="createTreatment">
+                    ثبت خدمت
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+

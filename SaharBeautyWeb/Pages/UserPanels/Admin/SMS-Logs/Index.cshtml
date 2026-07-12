@@ -1,0 +1,104 @@
+﻿@page
+@model SaharBeautyWeb.Pages.UserPanels.Admin.SMS_Logs.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+
+    var credit = Model.CreditModel;
+    var model = Model.AllSMSModel;
+    ViewData["ActiveMenu"] = "SMSList";
+}
+
+<link href="~/layout/admin/assets/css/pages/sms-logs/sms-log.css" rel="stylesheet" />
+
+@if (model != null)
+{
+
+    <div class="sms-page-container">
+
+        <!-- بخش اعتبار پنل -->
+        <div class="sms-credit-card">
+            @if (credit != null)
+            {
+
+                <div>
+                    <h2>اعتبار پنل پیامکی</h2>
+                    <p id="sms-credit" class="credit-value"> @($" تعداد {credit.Amount}")</p>
+                </div>
+                <button id="refresh-credit" class="refresh-btn" onclick="location.reload();">🔄 به‌روزرسانی</button>
+            }
+
+
+        </div>
+
+        <form method="get" id="search-form">
+            <!-- بخش  جستجو -->
+            <div class="sms-filters">
+                <input type="text"
+                       id="searchBox"
+                       value="@Model.Search"
+                       name="Search"
+                       placeholder="جستجو در شماره تلفن..." />
+            </div>
+            <button type="submit" hidden></button>
+        </form>
+
+        <!-- جدول پیام‌ها -->
+        <div class="sms-table-wrapper">
+            <table class="sms-table">
+                <thead>
+                    <tr>
+                        <th>عنوان</th>
+                        <th>گیرنده</th>
+                        <th>متن پیام</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                    </tr>
+                </thead>
+
+
+                <tbody id="smsTableBody">
+                    @if (model != null && model.AllSMS.Any())
+                    {
+                        @foreach (var item in model.AllSMS)
+                        {
+
+                            <tr>
+                                <td>@item.Title</td>
+                                <td>@item.ReceiverNumber</td>
+                                <td>@item.Content</td>
+                                <td><span class="status sent">@item.Status</span></td>
+                                <td>@item.CreatedAt</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <a class="page-btn btn btn-outline-primary @(model.CurrentPage == 0 ? "disabled" : "")"
+               asp-page="Index"
+               asp-route-pageNumber="@(model.CurrentPage - 1)"
+               asp-route-Search="@Model.Search">
+                قبلی
+            </a>
+
+            <span class="current-page btn btn-primary disabled">
+                @(model.CurrentPage)
+            </span>
+
+            <a class="page-btn btn btn-outline-primary @(model.CurrentPage == model.TotalPages ? "disabled" : "")"
+               asp-page="Index"
+               asp-route-pageNumber="@(model.CurrentPage + 1)"
+               asp-route-Search="@Model.Search">
+                بعدی
+            </a>
+        </div>
+
+    </div>
+}
+
+@section Scripts {
+    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sms-logs/sms-log.js"></script>
+}

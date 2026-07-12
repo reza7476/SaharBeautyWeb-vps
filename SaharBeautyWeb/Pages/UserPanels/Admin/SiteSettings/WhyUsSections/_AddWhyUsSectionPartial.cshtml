@@ -1,0 +1,69 @@
+﻿@using SaharBeautyWeb.Models.Entities.WhyUsSections.Models
+@model WhyUsSectionModel
+<link href="~/layout/admin/assets/css/pages/whyussections/addsheet.css" rel="stylesheet" />
+<div id="register-whyus-section" class="whyus-section-form-container">
+    <div class="whyus-section-card">
+        <div class="whyus-section-header">
+            <h4 class="whyus-section-title">ثبت بخش "چرا ما"</h4>
+        </div>
+
+        <div class="whyus-section-body">
+            <div class="row g-4 align-items-start">
+                <!-- فرم ثبت -->
+                <div class="col-md-6">
+                    <form class="needs-validation whyus-section-form"
+                          method="post"
+                          id="add-whyus-section-form"
+                          asp-page="Index"
+                          asp-page-handler="CreateWhyUsSection"
+                          enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label class="form-label">عنوان</label>
+                            <input type="text"
+                                   id="whyus-section-title"
+                                   class="form-control"
+                                   asp-for="Title"
+                                   placeholder="لطفاً عنوان را وارد کنید">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">توضیحات</label>
+                            <textarea class="form-control"
+                                      asp-for="Description"
+                                      id="whyus-section-description"
+                                      rows="5"
+                                      placeholder="توضیحات بخش را وارد کنید"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">انتخاب تصویر</label>
+                            <input type="file"
+                                   class="form-control whyus-section-image-input"
+                                   asp-for="Image"
+                                   accept="image/jpeg,image/png">
+                        </div>
+
+                        <button class="btn btn-primary w-100 whyus-section-submit-btn"
+                                type="submit"
+                                id="createWhyUsSection">
+                            ثبت بخش
+                        </button>
+                    </form>
+                </div>
+
+                <!-- پیش‌نمایش تصویر -->
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <div class="whyus-section-image-preview">
+                        <img 
+                             src=""
+                             class="img-fluid rounded shadow-sm whyus-section-preview-img"
+                             alt="پیش‌نمایش تصویر"
+                             style="object-fit:cover; max-height:300px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

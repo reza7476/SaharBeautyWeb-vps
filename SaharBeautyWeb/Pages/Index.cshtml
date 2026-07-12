@@ -1,0 +1,24 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@await Component.InvokeAsync("BannerLanding")
+
+@await Component.InvokeAsync("FirstTreatmentLanding")
+@await Component.InvokeAsync("WhyUsSectionLanding")
+
+@await Component.InvokeAsync("ContactUs")
+
+
+<!-- Testimonials Section comment -->
+
+<div id="client-comments-container" class="client-comments-container">
+    @await Component.InvokeAsync("ClientComments", new { pageNumber = Request.Query["pageNumber"].ToString() != "" ? int.Parse(Request.Query["pageNumber"]) : 0 })
+</div>
+
+
+<div id="treatment-gallery-containers" class="treatment-gallery-containers">
+    @await Component.InvokeAsync("LandingGallery", new { pageNumber = Request.Query["pageNumber"].ToString() != "" ? int.Parse(Request.Query["pageNumber"]) : 0 })
+</div>

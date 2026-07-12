@@ -1,0 +1,334 @@
+﻿using SaharBeautyWeb.Models.Commons.Dtos;
+using SaharBeautyWeb.Models.Entities.Appointments.Dtos;
+using SaharBeautyWeb.Models.Entities.Appointments.Dtos.Clients;
+using SaharBeautyWeb.Models.Entities.Appointments.Enums;
+using SaharBeautyWeb.Models.Entities.Appointments.Models;
+using SaharBeautyWeb.Models.Entities.Appointments.Models.Clients;
+using System.Text;
+using System.Text.Json;
+
+namespace SaharBeautyWeb.Services.UserPanels.Clients.Appointments;
+
+public class AppointmentService : UserPanelBaseService, IAppointmentService
+{
+    private readonly string _apiUrl = "appointments";
+
+    public AppointmentService(HttpClient client) : base(client)
+    {
+    }
+
+    public async Task<ApiResultDto<string>> Add(AddAppointmentDto dto)
+    {
+        var url = $"{_apiUrl}";
+        var json = JsonSerializer.Serialize(new
+        {
+            dto.TreatmentId,
+            dto.Duration,
+            dto.AppointmentDate,
+            dto.DayWeek
+        });
+
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var result = await PostAsync<string>(url, content);
+        return result;
+
+    }
+
+    public async Task<ApiResultDto<string>> AddAdminAppointment(AddAdminAppointmentDto dto)
+    {
+        var url = $"{_apiUrl}/add-admin";
+        var json = JsonSerializer.Serialize(new
+        {
+            dto.ClientId,
+            dto.Duration,
+            dto.TreatmentId,
+            dto.AppointmentDate,
+            dto.DayWeek
+        });
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var result = await PostAsync<string>(url, content);
+        return result;
+    }
+
+    public async Task<ApiResultDto<object>> CancelByClient(string id)
+    {
+        var url = $"{_apiUrl}/{id}/cancel-by-client";
+
+        var result = await PatchAsync<object>(url);
+        return result;
+    }
+
+    public async Task<ApiResultDto<object>> ChangeStatus(string id, AppointmentStatus status)
+    {
+        var url = $"{_apiUrl}/change-status";
+        var json = JsonSerializer.Serialize(new
+        {
+            id,
+            status
+        });
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var result = await PatchAsync<object>(url, content);
+        return result;
+    }
+
+    public async Task<ApiResultDto<GetDAshboardAdminSummaryDto?>> GetAdminDashboardSummary()
+    {
+        var url = $"{_apiUrl}/admin-dashboard-summary";
+        var result = await GetAsync<GetDAshboardAdminSummaryDto?>(url);
+        return result;
+    }
+
+    public async Task<ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>>
+        GetAllAdminAppointments(
+        int offset,
+        int limit,
+        AdminAppointmentFilterDto? filter = null,
+        string? search = null)
+    {
+        var url = $"{_apiUrl}/all-admin";
+
+        var query = new List<string>()
+        {
+            $"Offset={offset}",
+            $"Limit={limit}",
+        };
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query.Add($"search={search}");
+        }
+
+        if (filter != null)
+        {
+            if (filter.Date != default)
+            {
+                query.Add($"filter.Date={filter.Date:yyyy-MM-dd}");
+            }
+            query.Add($"Status={filter.Status}");
+            query.Add($"DayWeek={filter.Day}");
+            query.Add($"TreatmentTitle={filter.TreatmentTitle}");
+        }
+
+        if (query.Any())
+        {
+            url = url + "?" + string.Join("&", query);
+        }
+
+        var result = await GetAsync<GetAllDto<GetAdminAllAppointmentsModel>>(url);
+        if (!result.IsSuccess || result.Error != null)
+        {
+            return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+            {
+                Error = result.Error,
+                IsSuccess = result.IsSuccess
+            };
+        }
+        var mapped = new GetAllDto<GetAdminAllAppointmentsModel>()
+        {
+            Elements = result.Data.Elements,
+            TotalElements = result.Data.TotalElements,
+        };
+
+        return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+        {
+            Data = mapped,
+            IsSuccess = true,
+            StatusCode = result.StatusCode
+        };
+    }
+
+    public async Task<ApiResultDto<GetAllDto<MyAppointmentsModel>>>
+         GetAllClientAppointments(int offset,
+         int limit,
+         ClientAppointmentFilterDto? filter = null)
+    {
+        var url = $"{_apiUrl}/all-my-appointments";
+        var query = new List<String>()
+        {
+            $"Offset={offset}",
+            $"Limit={limit}"
+        };
+        if (filter != null)
+        {
+            if (filter.Date != default)
+            {
+                query.Add($"filter.Date={filter.Date:yyyy-MM-dd}");
+            }
+            query.Add($"Status={filter.Status}");
+            query.Add($"DayWeek={filter.Day}");
+        }
+
+        if (query.Any())
+        {
+
+            url = url + "?" + string.Join("&", query);
+        }
+
+        var result = await GetAsync<GetAllDto<MyAppointmentsModel>>(url);
+
+
+        if (!result.IsSuccess || result.Error != null)
+            return new ApiResultDto<GetAllDto<MyAppointmentsModel>>
+            {
+                Error = result.Error,
+                IsSuccess = result.IsSuccess,
+            };
+
+        var mapped = new GetAllDto<MyAppointmentsModel>()
+        {
+            Elements = result.Data.Elements,
+            TotalElements = result.Data.TotalElements
+        };
+        return new ApiResultDto<GetAllDto<MyAppointmentsModel>>
+        {
+            Data = mapped,
+            IsSuccess = true,
+            StatusCode = result.StatusCode
+        };
+    }
+
+    public async Task<ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>> GetAllPendingAdminAppointments(
+        int offset,
+        int limit,
+        AdminAppointmentFilterDto? filter = null,
+        string? search = null)
+    {
+
+        var url = $"{_apiUrl}/all-pending-admin";
+
+        var query = new List<string>()
+        {
+            $"Offset={offset}",
+            $"Limit={limit}",
+        };
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query.Add($"search={search}");
+        }
+        if (filter != null)
+        {
+            if (filter.Date != default)
+            {
+                query.Add($"filter.Date={filter.Date:yyyy-MM-dd}");
+            }
+            query.Add($"DayWeek={filter.Day}");
+            query.Add($"TreatmentTitle={filter.TreatmentTitle}");
+        }
+
+        if (query.Any())
+        {
+            url = url + "?" + string.Join("&", query);
+        }
+        var result = await GetAsync<GetAllDto<GetAdminAllAppointmentsModel>>(url);
+        if (!result.IsSuccess || result.Error != null)
+        {
+            return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+            {
+                Error = result.Error,
+                IsSuccess = result.IsSuccess
+            };
+        }
+        var mapped = new GetAllDto<GetAdminAllAppointmentsModel>()
+        {
+            Elements = result.Data.Elements,
+            TotalElements = result.Data.TotalElements,
+        };
+
+        return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+        {
+            Data = mapped,
+            IsSuccess = true,
+            StatusCode = result.StatusCode
+        };
+    }
+
+    public async Task<ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>>
+        GetAllTodayAdminAppointments(int offset,
+        int limit,
+        AdminAppointmentFilterDto? filter = null,
+        string? search = null)
+    {
+        var url = $"{_apiUrl}/all-today";
+        var query = new List<string>()
+        {
+            $"Offset={offset}",
+            $"Limit={limit}",
+        };
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query.Add($"search={search}");
+        }
+        if (filter != null)
+        {
+            query.Add($"Status={filter.Status}");
+            query.Add($"TreatmentTitle={filter.TreatmentTitle}");
+        }
+        if (query.Any())
+        {
+            url = url + "?" + string.Join("&", query);
+        }
+        var result = await GetAsync<GetAllDto<GetAdminAllAppointmentsModel>>(url);
+        if (!result.IsSuccess || result.Error != null)
+        {
+            return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+            {
+                Error = result.Error,
+                IsSuccess = result.IsSuccess
+            };
+        }
+        var mapped = new GetAllDto<GetAdminAllAppointmentsModel>()
+        {
+            Elements = result.Data.Elements,
+            TotalElements = result.Data.TotalElements,
+        };
+
+        return new ApiResultDto<GetAllDto<GetAdminAllAppointmentsModel>>
+        {
+            Data = mapped,
+            IsSuccess = true,
+            StatusCode = result.StatusCode
+        };
+    }
+
+    public async Task<ApiResultDto<List<GetAppointmentPerDayForChartDto>>> GetAppointmentPerDayForChart()
+    {
+
+        var url = $"{_apiUrl}/appointment-per-day-for-chart";
+        var result = await GetAsync<List<GetAppointmentPerDayForChartDto>>(url);
+        return result;
+    }
+
+    public async Task<ApiResultDto<List<GetBookedAppointmentByDateDto>>> GetBookedByDate(DateTime dateTime)
+    {
+        var url = $"{_apiUrl}/booked-appointment";
+
+        var content = new MultipartFormDataContent();
+        content.Add(new StringContent(dateTime.ToString() ?? ""), "date");
+
+
+        var result = await GetAsync<List<GetBookedAppointmentByDateDto>>(url, content);
+        return result;
+    }
+
+    public async Task<ApiResultDto<DashboardClientSummaryDto?>> GetDashboardClientSummary()
+    {
+        var url = $"{_apiUrl}/dashboard-client-summary";
+        var result = await GetAsync<DashboardClientSummaryDto?>(url);
+        return result;
+    }
+
+    public async Task<ApiResultDto<GetAppointmentDetailsDto?>> GetDetails(string id)
+    {
+
+        var url = $"{_apiUrl}/{id}";
+
+        var result = await GetAsync<GetAppointmentDetailsDto?>(url);
+        return result;
+    }
+
+    public async Task<ApiResultDto<List<GetAdminDashboardNewAppointmentsDto>>> GetNewAppointmentDashboard()
+    {
+        var url = $"{_apiUrl}/new-appointments-for-dashboard";
+        var result = await GetAsync<List<GetAdminDashboardNewAppointmentsDto>>(url);
+        return result;
+    }
+}

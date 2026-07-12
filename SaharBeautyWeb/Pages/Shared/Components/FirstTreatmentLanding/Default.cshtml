@@ -1,0 +1,47 @@
+﻿@using SaharBeautyWeb.Models.Entities.Treatments.Models.Landing
+
+<link href="~/layout/assets/css/pages/layoutlanding/treatmentlanding.css" rel="stylesheet" />
+@model List<GetTreatmentsForLandingDto>
+
+<section id="services" class="services py-16">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold mb-6">خدمات ما</h2>
+        <p class="mb-12 text-gray-700">با تیمی از متخصصان حرفه‌ای و با استفاده از بهترین محصولات، زیباترین نسخه خودتان را تجربه کنید</p>
+        <div class="services-wrapper grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- نمونه کارت‌ها -->
+            @foreach (var item in Model)
+            {
+                var rate = item.Rate;
+
+                var fullStars = (int)Math.Floor(rate);
+                var hasHalf = rate - fullStars >= 0.5;
+                var emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+                <div class="service-card bg-white rounded-lg shadow p-4">
+                    <img src="@item.Media!.URL" alt="@item.Title"
+                         class="rounded-lg mb-3 w-full h-48 object-cover">
+                    <h3 class="font-bold text-xl mb-1">@item.Title</h3>
+                    <p class="text-gray-600 mb-2">@item.Description</p>
+                    <div class="rating flex items-center gap-1">
+                        <span class="text-yellow-500 text-lg">
+                            @for (int i = 0; i < fullStars; i++)
+                            {
+                                <i class="fa-solid fa-star text-yellow-500"></i>
+                            }
+                            @if (hasHalf)
+                            {
+                                <i class="fa-solid fa-star-half-stroke text-yellow-500"></i>
+                            }
+                            @for (int i = 0; i < emptyStars; i++)
+                            {
+                                <i class="fa-regular fa-star text-yellow-500"></i>
+                            }
+                        </span>
+                        <span class="text-gray-600 text-sm">(@rate.ToString("0.0"))</span>
+                    </div>
+                </div>
+            }
+            <!-- کارت‌های دیگر مشابه اضافه شود -->
+        </div>
+    </div>
+</section>

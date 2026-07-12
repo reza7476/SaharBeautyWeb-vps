@@ -1,0 +1,55 @@
+﻿@using SaharBeautyWeb.Models.Entities.AboutUs.Management.Models
+@model EditAboutUsModel
+<link href="~/layout/admin/assets/css/pages/aboutus/editstyle.css" rel="stylesheet" />
+
+<div class="card edit-aboutus-card">
+    <div class="card-header">
+        <h4 class="card-title">ویرایش درباره ما</h4>
+    </div>
+    <div class="card-body">
+        <form class="needs-validation"
+              id="edit-about-us-section-form"
+              asp-page-handler="EditAboutUs"
+              method="post"
+              enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">شماره موبایل</label>
+                    <input class="form-control" asp-for="MobileNumber" id="edit-about-us-mobile" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">تلفن محل کار</label>
+                    <input class="form-control" asp-for="Telephone" id="edit-about-us-telephone" />
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">آدرس</label>
+                    <input class="form-control" asp-for="Address" id="edit-about-us-address" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">ایمیل</label>
+                    <input class="form-control" asp-for="Email" id="edit-about-us-email" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">اینستاگرام</label>
+                    <input class="form-control" asp-for="Instagram" id="edit-about-us-instagram" />
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">مکان سالن روی نقشه</label>
+                    <div id="edit-display-salon-map" class="edit-aboutus-map"></div>
+                    <input type="hidden" asp-for="Latitude" id="edit-latitude" />
+                    <input type="hidden" asp-for="Longitude" id="edit-longitude" />
+                    <button type="button" id="remove-location-btn" class="btn btn-outline-danger btn-sm mt-2 remove-location-btn">حذف مکان</button>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">توضیحات</label>
+                    <textarea class="form-control" asp-for="Description" id="edit-about-us-description"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary w-100 aboutus-btn mt-3" id="apply-edit-about-us-button">ثبت تغییرات</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

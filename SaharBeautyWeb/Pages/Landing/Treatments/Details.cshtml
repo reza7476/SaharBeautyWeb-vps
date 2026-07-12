@@ -1,0 +1,112 @@
+﻿@page
+@model SaharBeautyWeb.Pages.Landing.Treatments.DetailsModel
+@{
+    Layout = "_Layout";
+}
+<link href="~/layout/assets/css/pages/treatmeants/treatmentdetails.css" rel="stylesheet" />
+
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<div class="page-title-wrap">
+    <div class="page-title-area title-img-two">
+        <div class="title-shape">
+            <img src="~/Layout/assets/images/title/title-shape1.png" alt="Shape">
+        </div>
+        <div class="d-table">
+            <div class="d-table-cell">
+                <div class="title-content">
+                    <h2>جزییات خدمات</h2>
+                    <ul>
+                        <li>
+                            <a href="/">خانه</a>
+                        </li>
+                        <li>
+                           
+                            <span>جزییات خدمات</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.Treatment != null)
+{
+    <div class="service-details-area pt-100 pb-70">
+        <div class="container">
+            <div class="details-img">
+                <img src="~/Layout/assets/images/services/service-details1.jpg" alt="Details">
+            </div>
+            <div class="details-spa">
+                <h3>@Model.Treatment.Title </h3>
+
+            </div>
+            <div class="details-items">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="left">
+                            <p> @Model.Treatment.Description</p>
+                            <div class="preview-page">
+                                <a href="../../">
+                                    <i class="bx bx-chevron-right"></i>
+                                    بازگشت
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="right">
+                            <div class="swiper details-swiper">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in Model.Treatment.Media)
+                                    {
+                                        <div class="swiper-slide">
+                                            <img src="@item.URL" alt="Service">
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- دکمه‌های کنترل -->
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+@section Scripts {
+    <script>
+        $(() => {
+            if ($(".details-swiper").length) {
+
+                var swiper = new Swiper(".details-swiper", {
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                });
+            }
+        });
+    </script>
+}

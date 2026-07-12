@@ -1,0 +1,78 @@
+﻿@page
+@model SaharBeautyWeb.Pages.UserPanels.Client.Appointment.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+    ViewData["ActiveMenu"] = "NewAppointment";
+}
+<link href="~/layout/admin/assets/css/pages/appointments/appointment.css" rel="stylesheet" />
+
+<div class="container">
+
+    <h1 class="page-title">ساعت کاری سالن</h1>
+
+    <!-- انتخاب خدمت -->
+    <div class="service-select-card">
+        <label for="serviceSelect">انتخاب خدمت</label>
+        <select id="serviceSelect">
+            <option selected disabled>انتخاب کنید...</option>
+            @foreach (var item in Model.AllTreatment)
+            {
+                <option value="@item.Title" data-id="@item.Id">@item.Title</option>
+            }
+        </select>
+    </div>
+
+    <!-- جزئیات خدمت -->
+    <div id="serviceDetails" class="service-details-card hidden">
+        <h2>جزئیات خدمت</h2>
+        <p id="serviceDesc">لطفاً یک خدمت را انتخاب کنید تا توضیحات نمایش داده شود.</p>
+    </div>
+
+    <!-- تقویم هفتگی -->
+    <div class="week-container">
+        @foreach (var day in Model.CurrentWeekDays)
+        {
+           
+            <div class="week-card" data-number="@day.Day" data-milady="@day.Date">
+              
+                <div class="day-name">@day.PersianDay</div>
+                <div class="day-date">@day.PersianDate</div>
+            </div>
+        }
+    </div>
+
+    <!-- partial time-->
+
+    <div id="timeSlotContainer" class="time-slot-section"></div>
+
+    <form method="post" id="reserveForm" asp-page-handler="Reserve" class="reserve-form">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="AppointmentModel.TreatmentId" id="input-treatmentId" />
+        <span asp-validation-for="AppointmentModel.TreatmentId"></span>
+       
+        <input type="hidden" asp-for="AppointmentModel.DateOnly" id="input-date" />
+        <span asp-validation-for="AppointmentModel.DateOnly"></span>
+       
+        <input type="hidden" asp-for="AppointmentModel.TimeOnly" id="input-time" />
+        <span asp-validation-for="AppointmentModel.TimeOnly"></span>
+       
+        <input type="hidden" asp-for="AppointmentModel.DayWeek" id="input-day-week" />
+        <span asp-validation-for="AppointmentModel.DayWeek"></span>
+
+        <button type="submit" class="btn btn-primary reserve-btn" id="reserve-btn">
+            ثبت نوبت
+        </button>
+    </form>
+
+</div>
+
+@section Scripts {
+    <script src="~/layout/admin/assets/js/pages/userpanels/clients/appointments/appointment.js"></script>
+    <script>
+        var getTreatmentDetails = '@Url.Page("Index", "GetTreatmentDetails")';
+        var getWeeklySchedule = '@Url.Page("Index", "GetWeeklySchedule")';
+        var reserveAppointment = '@Url.Page("Index", "Reserve")';
+
+    </script>
+}

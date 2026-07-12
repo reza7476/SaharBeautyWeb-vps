@@ -1,0 +1,103 @@
+﻿@using SaharBeautyWeb.Models.Entities.WhyUsSections.Models
+@model WhyUsSectionModel_Edit
+<link href="~/layout/admin/assets/css/pages/whyussections/editstyle.css" rel="stylesheet" />
+<div class="whyus-edit-card card shadow-sm border-0 mb-4">
+    <div class="card-header bg-light">
+        <h4 class="card-title mb-0 text-primary fw-bold">ویرایش چرا ما</h4>
+    </div>
+
+    <div class="card-body">
+        <!-- فرم ویرایش عنوان و توضیحات -->
+        <form class="needs-validation"
+              method="post"
+              id="edit-why-us-section-title-description-form"
+              asp-page="Index"
+              asp-page-handler="ApplyEditTitleAndDescription"
+              enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">عنوان</label>
+                    <input type="text"
+                           id="edit-why-us-section-title"
+                           class="form-control"
+                           asp-for="Title"
+                           placeholder="لطفا یک عنوان را وارد نمایید"
+                           value="@Model.Title" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">توضیحات</label>
+                    <textarea class="form-control"
+                              id="edit-why-us-section-description"
+                              asp-for="Description"
+                              rows="5">@Model.Description</textarea>
+                </div>
+            </div>
+
+            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+
+            <button type="submit"
+                    class="btn btn-primary w-100 mt-2 edit-why-us-section-title-description">
+                <i class="bx bx-check-circle"></i> اعمال تغییرات
+            </button>
+        </form>
+
+        <hr class="my-4" />
+
+        <!-- نمایش تصویر فعلی -->
+        <div class="current-image-section text-center mb-4">
+            <img class="img-thumbnail shadow-sm rounded"
+                 alt="@Model.Image?.ImageName"
+                 src="@Model.Image?.Url"
+                 style="max-width:300px; border-radius:1rem;" />
+        </div>
+
+        <!-- دکمه نمایش فرم ویرایش عکس -->
+        <div class="text-center">
+            <button type="button"
+                    class="btn btn-outline-primary w-50 show-edit-section-form-btn"
+                    id="show-edit-section-form-div">
+                <i class="bx bx-image"></i> ویرایش عکس
+            </button>
+        </div>
+
+        <!-- فرم ویرایش عکس -->
+        <div class="edit-whyus-image-form mt-4"
+             id="edit-why-us-section-image-div"
+             style="display:none;">
+            <form class="needs-validation"
+                  method="post"
+                  id="edit-whyUsSection-image-form"
+                  asp-page="Index"
+                  asp-page-handler="ApplyEditWhyUsImage"
+                  enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3">
+                        <input type="file"
+                               asp-for="AddMedia"
+                               class="form-control whyus-section-image-input"
+                               accept=".jpg,.jpeg,.png" />
+                    </div>
+
+                    <div class="col-md-6 text-center mb-3">
+                        <img class="img-thumbnail shadow-sm whyus-section-preview-img"
+                             alt="پیش‌نمایش تصویر جدید"
+                             style="max-width:200px; border-radius:0.8rem;" />
+                    </div>
+                </div>
+
+                <input type="hidden" asp-for="@Model.Id" id="whyUsSectionId" value="@Model.Id" />
+
+                <button type="submit"
+                        class="btn btn-success w-100 mt-2 apply-edited-why-us-image"
+                        id-data="@Model.Id">
+                    <i class="bx bx-save"></i> ذخیره تصویر جدید
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

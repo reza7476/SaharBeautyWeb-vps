@@ -1,0 +1,69 @@
+﻿@page
+@model SaharBeautyWeb.Pages.UserPanels.Admin.SiteSettings.WhyUsSections.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+    ViewData["ActiveMenu"] = "WhyUs";
+}
+<link href="~/layout/admin/assets/css/pages/whyussections/whyussectionstyle.css" rel="stylesheet" />
+<!-- بخش ویرایش یا افزودن بخش "چرا ما" -->
+@if (Model.ModelData != null)
+{
+    @await Html.PartialAsync("_whyUsSectionPartial", Model.ModelData)
+}
+else
+{
+    <partial name="_AddWhyUsSectionPartial" model="Model.ModelData" />
+}
+
+<!-- بخش اصلی سوالات و پاسخ‌ها -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="whyus-section-card">
+            <div class="whyus-section-card-body">
+                <h5 class="whyus-section-title">چرا ما بهترینیم؟</h5>
+
+                <div class="row mb-3">
+                    <div class="col-sm">
+                        <button type="button"
+                                class="btn btn-primary whyus-section-add-btn w-100 w-sm-auto add-why-us-question-btn"
+                                data-id="@(Model.ModelData != null ? Model.ModelData.Id : "0")">
+                            <i class="bx bx-plus me-1"></i> افزودن پرسش و پاسخ
+                        </button>
+                    </div>
+                </div>
+
+                @if (Model.ModelData != null && Model.ModelData.QuestionModels.Count > 0)
+                {
+                    foreach (var item in Model.ModelData.QuestionModels)
+                    {
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span class="faq-toggle">+</span>
+                                <span class="faq-title">@item.Question</span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>@item.Answer</p>
+                                <button class="delete-btn delete-question-btn" data-id="@item.Id">حذف</button>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var createWhyUsSectionUrl = '@Url.Page("Index", "CreateWhyUsSection")';
+        var addWhyUsQuestionPartialUrl = '@Url.Page("Index", "AddWhyUsQuestionPartial")';
+        var addQuestionsUrl = '@Url.Page("Index", "AddQuestions")';
+        var deleteQuestionUrl = '@Url.Page("Index", "DeleteQuestion")';
+        var editWhyUsSectionEditUrl = '@Url.Page("Index", "EditWhyUsSectionEdit")';
+        var applyEditTitleAndDescripWhyUsSection = '@Url.Page("Index", "ApplyEditTitleAndDescription")';
+        var applyEditWhyUsImage = '@Url.Page("Index", "ApplyEditWhyUsImage")';
+    </script>
+
+    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sitesettings/whyusquestions/whyussection.js"></script>
+}

@@ -1,0 +1,196 @@
+﻿body {
+    font-family: "Tahoma", sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.details-container {
+    max-width: 700px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    padding: 25px;
+}
+
+.page-title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    border-bottom: 2px solid #6ac27c;
+    padding-bottom: 8px;
+}
+
+.details-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.detail-value {
+    color: #333;
+}
+
+/* رنگ وضعیت‌ها */
+.status-pending {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.status-confirmed {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* دکمه بازگشت */
+.button-group {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-back {
+    display: inline-block;
+    background-color: #6ac27c;
+    color: white;
+    text-decoration: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-back:hover {
+        background-color: #57ad68;
+    }
+
+
+.status-dropdown {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    min-width: 180px;
+}
+
+    /* فلش زیباتر */
+    .status-dropdown::after {
+        content: '▼';
+        position: absolute;
+        right: 10px;
+        pointer-events: none;
+    }
+
+    /* هاور */
+    .status-dropdown:hover {
+        border-color: #888;
+        background-color: #f3f3f3;
+    }
+
+    /* فوکوس */
+    .status-dropdown:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    }
+
+    /* رنگ هر وضعیت در منو */
+    .status-dropdown option[value="Pending"] {
+        color: #ff9800; /* نارنجی - در انتظار */
+        font-weight: bold;
+    }
+
+    .status-dropdown option[value="Confirmed"] {
+        color: #2196f3; /* آبی - تایید شده */
+        font-weight: bold;
+    }
+
+    .status-dropdown option[value="Completed"] {
+        color: #4caf50; /* سبز - انجام شد */
+        font-weight: bold;
+    }
+
+    .status-dropdown option[value="Cancelled"] {
+        color: #f44336; /* قرمز - لغو شده */
+        font-weight: bold;
+    }
+    .status-dropdown option[value="NoShow"] {
+        color: #9c27b0;
+    }
+
+.btn-save-status {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    margin-right: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+}
+
+    .btn-save-status:hover {
+        background-color: #0056b3 !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-save-status:active {
+        background-color: #004494 !important;
+        transform: translateY(0);
+    }
+
+
+/* موبایل */
+@media (max-width: 600px) {
+    .details-card {
+        gap: 8px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        border: 1px solid rgba(46,204,113,0.2);
+        border-radius: 8px;
+        margin-bottom: 6px;
+        background: #fcfcfc;
+    }
+
+    .detail-label {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
+
+    .detail-value {
+        font-size: 0.95rem;
+        color: #222;
+    }
+}

@@ -1,0 +1,159 @@
+﻿using SaharBeautyWeb.Models.Entities.Appointments.Enums;
+using SaharBeautyWeb.Models.Entities.SMS_Logs.Enum;
+using SaharBeautyWeb.Models.Entities.WeeklySchedules.Dtos;
+using System.Globalization;
+
+namespace SaharBeautyWeb.Configurations.Extensions;
+
+public static class StringExtension
+{
+
+    public static string ConvertPersianNumberToEnglish(this string number)
+    {
+
+        if (string.IsNullOrWhiteSpace(number))
+            return number;
+        return number
+        .Replace('۰', '0')
+        .Replace('۱', '1')
+        .Replace('۲', '2')
+        .Replace('۳', '3')
+        .Replace('۴', '4')
+        .Replace('۵', '5')
+        .Replace('۶', '6')
+        .Replace('۷', '7')
+        .Replace('۸', '8')
+        .Replace('۹', '9');
+    }
+
+    public static decimal ConvertStringNumberToDecimal(this string number)
+    {
+        if (string.IsNullOrWhiteSpace(number))
+            return 0m;
+        number = number.ConvertPersianNumberToEnglish();
+
+        number = number.Replace(",", "").Replace("٬", "");
+        decimal price = decimal.Parse(number, CultureInfo.InvariantCulture);
+        return price;
+    }
+
+
+    public static string ConvertDecimalNumberToString(this decimal number)
+    {
+        var result= number.ToString("N0", CultureInfo.InvariantCulture);
+        var persianNumber = result.ConvertEnglishNumberToPersian();
+        return persianNumber;
+    }
+
+    public static string ConvertEnglishNumberToPersian(this  string number)
+    {
+        if (string.IsNullOrWhiteSpace(number))
+            return number;
+        return number
+        .Replace( '0','۰')
+        .Replace( '1','۱')
+        .Replace( '2','۲')
+        .Replace( '3','۳')
+        .Replace( '4','۴')
+        .Replace( '5','۵')
+        .Replace( '6','۶')
+        .Replace( '7','۷')
+        .Replace( '8','۸')
+        .Replace( '9', '۹');
+    }
+
+    public static string ConvertAppointmentStatusToString( this AppointmentStatus status)
+    {
+        switch(status)
+        {
+            case AppointmentStatus.Completed:
+                return "انجام شده";
+            case AppointmentStatus.Confirmed:
+                return "اطلاع رسانی شده";
+            case AppointmentStatus.Pending:
+                return "در انتظار تایید";
+            case AppointmentStatus.NoShow:
+                return "حضور نیافته";
+            case AppointmentStatus.Cancelled:
+                return "کنسل شده";
+            case AppointmentStatus.Approved:
+                return "تایید شده";
+            default: return "نامشخص";
+        }
+    }
+
+    public static  string  ConvertDayWeekToPersianDay(this DayWeek day)
+    {
+        switch (day)
+        {
+            case DayWeek.Saturday:
+                return "شنبه";
+            case DayWeek.Sunday:
+                return "یک شنبه";
+            case DayWeek.Monday:
+                return "دوشنبه";
+            case DayWeek.Tuesday:
+                return "سه شنبه";
+            case DayWeek.Wednesday:
+                return "چهارشنبه";
+            case DayWeek.Thursday:
+                return "پنجشنبه";
+            case DayWeek.Friday:
+                return "جمعه";
+            default: return " ";
+        }
+    }
+
+    public static string ConvertActiveBoolToString(bool isActive)
+    {
+        switch (isActive)
+        {
+            case true: return "فعال";
+            case false: return "غیر فعال";
+        }
+    }
+
+    public static string ConvertSMSStatusToString(this SendSMSStatus status)
+    {
+        switch (status)
+        {
+
+            case SendSMSStatus.NotResponse:
+                return "پاسخی از ملی پیامک دریافت نشد";
+            case SendSMSStatus.Pending:
+                return "در حال ارسال ";
+            case SendSMSStatus.Sent:
+                return "ارسال شد";
+            case SendSMSStatus.Failed:
+                return "موفق نبود";
+            case SendSMSStatus.Delivered:
+                return "تحویل داده شد";
+            default: return " نامشخص";
+        }
+    }
+
+
+    public static string RemoveCountryCodeFromPhoneNumber(this string phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone))
+            return string.Empty;
+
+        // حذف فاصله، خط تیره و پرانتزها
+        phone = phone.Replace(" ", "")
+                     .Replace("-", "")
+                     .Replace("(", "")
+                     .Replace(")", "");
+
+        // حذف +98 یا 0098 یا 98 از ابتدای شماره
+        if (phone.StartsWith("+98"))
+            phone =  phone.Substring(3);
+        else if (phone.StartsWith("0098"))
+            phone =  phone.Substring(4);
+        else if (phone.StartsWith("98"))
+            phone =  phone.Substring(2);
+        else if (phone.StartsWith("0"))
+            phone = phone.Substring(1);
+
+        return phone;
+    }
+}

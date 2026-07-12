@@ -1,0 +1,123 @@
+﻿@using SaharBeautyWeb.Configurations.Extensions
+@using SaharBeautyWeb.Models.Entities.Appointments.Models
+
+@model GetAllAppointmentsModel
+<link href="~/layout/admin/assets/css/pages/admin/appointments/today-appointment-list.css" rel="stylesheet" />
+
+
+@if (Model.AllAppointmentModel.Any())
+{
+    <div class="table-responsive">
+        <table class="table treatments-table align-middle">
+            <thead>
+                <tr>
+                    <th>عنوان </th>
+                    <th>نام مشتری </th>
+                    <th>شماره تلفن مشتری </th>
+                    <th>زمان شروع</th>
+                    <th>زمان پایان</th>
+                    <th>روز هفته</th>
+                    <th>تاریخ نوبت</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.AllAppointmentModel.Any())
+                {
+                    @foreach (var appointment in Model.AllAppointmentModel)
+                    {
+                        var status = appointment.Status.ConvertAppointmentStatusToString();
+                        var day = appointment.DayWeek.ConvertDayWeekToPersianDay();
+
+                        <tr>
+                            <td data-label="عنوان">@appointment.TreatmentTitle</td>
+                            <td data-label="نام مشتری">@(appointment.ClientName + " " + appointment.ClientLastName)</td>
+                            <td data-label="شماره تلفن">@appointment.ClientMobile</td>
+                            <td data-label="زمان شروع">@appointment.StartTime.ToString("HH:mm")</td>
+                            <td data-label="زمان پایان">@appointment.EndTime.ToString("HH:mm")</td>
+                            <td data-label="روز هفته">@day</td>
+                            <td data-label="تاریخ">@(appointment.AppointmentDate.ConvertDateOnlyToPersian())</td>
+
+                            <td data-label="وضیعت">
+                                <span class="status-badge @($"status-{appointment.Status}")">
+                                    @status
+                                </span>
+                            </td>
+
+                            <td data-label="عملیات" data-id="@appointment.Id">
+                                <a asp-page="../Details"
+                                   asp-route-id="@appointment.Id"
+                                   asp-route-ReturnUrl="/UserPanels/Admin/Appointments/PendingAppointments"
+                                   asp-route-Filter_day="@ViewData["Day"]"
+                                   asp-route-Filter_status="@ViewData["Search"]"
+                                   asp-route-Filter_date="@ViewData["Date"]"
+                                   asp-route-Filter_treatmentTitle="@ViewData["TreatmentTitle"]"
+                                   asp-route-pageNumber="@(Model.CurrentPage)"
+                                   
+                                   class="edit-btn">
+                                    جزئیات
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">هیچ داده‌ای یافت نشد</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="row align-items-center justify-content-between mt-3">
+    <div class="col-md-5 col-12 text-center text-md-start mb-3 mb-md-0">
+        <div class="dataTables_info text-muted">
+            مجموع: <strong>@Model.TotalElements</strong> مورد
+        </div>
+    </div>
+
+    <div class="col-md-7 col-12">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center justify-content-md-end flex-wrap mb-0">
+                <!-- قبلی -->
+                <li class="page-item @(Model.CurrentPage == 0 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Filter.Day="@ViewData["Day"]"
+                       asp-route-Filter.Status="@ViewData["Search"]"
+                       asp-route-Filter.Date="@ViewData["Date"]"
+                       asp-route-Filter.TreatmentTitle="@ViewData["TreatmentTitle"]"
+                       asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                       aria-label="Previous">
+                        <span aria-hidden="true">قبلی</span>
+                    </a>
+                </li>
+
+                <!-- شماره صفحه -->
+                <li class="page-item active">
+                    <span class="page-link">
+                        @(Model.CurrentPage + 1) از @(Model.TotalPages + 1)
+                    </span>
+                </li>
+
+                <!-- بعدی -->
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                       asp-route-Filter.Day="@ViewData["Day"]"
+                       asp-route-Filter.Status="@ViewData["Search"]"
+                       asp-route-Filter.Date="@ViewData["Date"]"
+                       asp-route-Filter.TreatmentTitle="@ViewData["TreatmentTitle"]"
+                       aria-label="Next">
+                        <span aria-hidden="true">بعدی</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

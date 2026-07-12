@@ -1,0 +1,73 @@
+﻿@using SaharBeautyWeb.Models.Entities.Review_Comment.Model
+@model GetReviewPublishedCommentModel
+<link href="~/layout/assets/css/pages/commponents/reviwe-comments/review-comments.css" rel="stylesheet" />
+
+<section class="component-section bg-white no-top-padding">
+    <div class="container mx-auto px-4">
+
+        <div class="section-title text-center">
+            <h2 class="title">نظرات مشتریان</h2>
+            <p class="subtitle">
+                تجربه مشتریان ما از خدمات سالن زیبایی شایسته
+            </p>
+        </div>
+
+        <div class="scroll-wrapper relative">
+
+            <button class="scroll-btn prev">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="scroll-container flex gap-6 overflow-x-auto scroll-smooth pb-4">
+                @foreach (var item in Model.AllAppointmentReview)
+                {
+                    var f1 = item.Name?.FirstOrDefault().ToString().ToUpper();
+                    var f2 = item.LastName?.FirstOrDefault().ToString().ToUpper();
+
+                    <div class="comment-card bg-white border rounded-lg p-6 shadow-lg flex-shrink-0 w-80">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="avatar">
+                                @($"{f1}.{f2}")
+                            </div>
+                            <div>
+                                <div class="font-bold">@($"{item.Name} {item.LastName}")</div>
+
+                                <div class="flex gap-1 mt-1">
+                                    @for (int i = 0; i < item.Rate; i++)
+                                    {
+                                        <i class="fa-solid fa-star star-gold"></i>
+                                    }
+                                </div>
+
+                                <div class="text-xs text-gray-500 mt-1">
+                                    خدمت: @item.TreatmentTitle
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-600 text-sm leading-relaxed break-words">
+                            @item.Comment
+                        </p>
+                    </div>
+                }
+            </div>
+
+            <button class="scroll-btn next">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+        </div>
+
+        <div class="pagination-wrapper text-center mt-4">
+            <button class="page-btn" data-page="@(Model.CurrentPage - 1)" @(Model.CurrentPage == 0 ? "disabled" : "")>
+                قبلی
+            </button>
+            <span>@(Model.CurrentPage + 1) از @(Model.TotalPages)</span>
+            <button class="page-btn" data-page="@(Model.CurrentPage + 1)" @(Model.CurrentPage >= Model.TotalPages - 1 ? "disabled" : "")>
+                بعدی
+            </button>
+        </div>
+
+    </div>
+</section>
+

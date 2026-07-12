@@ -1,0 +1,318 @@
+﻿using SaharBeautyWeb.Models.Commons.Dtos;
+using System.Text.Json;
+
+public class UserPanelBaseService
+{
+    protected readonly HttpClient _client;
+
+    public UserPanelBaseService(HttpClient client)
+    {
+        _client = client;
+    }
+
+    protected async Task<ApiResultDto<T>> SendPostRequestAsync<T>(
+    string url,
+    HttpContent? content = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = content
+        };
+
+        var response = await _client.SendAsync(request);
+        var raw = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (!string.IsNullOrEmpty(raw))
+            {
+                T data;
+
+                // اگر
+                // T
+                // رشته است، مستقیم مقدار را بگیریم
+                if (typeof(T) == typeof(string))
+                {
+                    object temp = raw.Trim('"'); // در صورتی که رشته کوتیشن دارد
+                    data = (T)temp;
+                }
+                else
+                {
+                    data = JsonSerializer.Deserialize<T>(
+                        raw,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+                }
+
+                return new ApiResultDto<T>
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            else
+            {
+                return new ApiResultDto<T>
+                {
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+        }
+        if (!response.IsSuccessStatusCode && raw != "")
+        {
+            var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return new ApiResultDto<T>
+            {
+                IsSuccess = false,
+                Error = errorMessage?.Error ?? "UnknownError",
+                StatusCode = (int)response.StatusCode
+            };
+
+
+        }
+
+        return new ApiResultDto<T>
+        {
+            IsSuccess = false,
+            Error = raw,
+            StatusCode = (int)response.StatusCode
+        };
+    }
+
+
+
+    protected async Task<ApiResultDto<T>>
+        SendPutRequestAsync<T>(string url, HttpContent content)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, url)
+        {
+            Content = content
+        };
+        return await PutAndPatchMethod<T>(request);
+    }
+
+    protected async Task<ApiResultDto<T>>
+        SendPatchRequestAsync<T>(string url, HttpContent? content = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        {
+            Content = content
+        };
+        return await PutAndPatchMethod<T>(request);
+    }
+
+
+
+    protected async Task<ApiResultDto<T>>
+        SendGetRequestAsync<T>(string url, HttpContent? content = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, url)
+        {
+            Content = content
+        };
+
+
+        var response = await _client.SendAsync(request);
+        var raw = await response.Content.ReadAsStringAsync();
+        if (response.IsSuccessStatusCode)
+        {
+            if (raw != "")
+            {
+
+                var data = JsonSerializer.Deserialize<T>(
+                    raw,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                return new ApiResultDto<T>
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            else
+            {
+                return new ApiResultDto<T>
+                {
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+        }if(!response.IsSuccessStatusCode && raw != "")
+        {
+            var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return new ApiResultDto<T>
+            {
+                IsSuccess = false,
+                Error = errorMessage?.Error ?? "UnknownError",
+                StatusCode = (int)response.StatusCode
+            };
+        }
+
+        return new ApiResultDto<T>
+        {
+            IsSuccess = false,
+            Error = raw,
+            StatusCode = (int)response.StatusCode
+        };
+
+    }
+
+
+
+    private async Task<ApiResultDto<T>>
+        SendDeleteRequestAsync<T>(string url)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, url)
+        {
+            Content = null
+        };
+
+        var response = await _client.SendAsync(request);
+        var raw = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (raw != "")
+            {
+
+                var data = JsonSerializer.Deserialize<T>(
+                    raw,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                return new ApiResultDto<T>
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            else
+            {
+                return new ApiResultDto<T>
+                {
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+        }if(!response.IsSuccessStatusCode && raw!="") 
+        {
+            var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return new ApiResultDto<T>
+            {
+                IsSuccess = false,
+                Error = errorMessage?.Error ?? "UnknownError",
+                StatusCode = (int)response.StatusCode
+            };
+        }
+
+        return new ApiResultDto<T>
+        {
+            IsSuccess = false,
+            Error = raw,
+            StatusCode = (int)response.StatusCode
+        };
+    }
+
+    private async Task<ApiResultDto<T>> PutAndPatchMethod<T>(HttpRequestMessage request)
+    {
+        var response = await _client.SendAsync(request);
+        var raw = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (raw != "")
+            {
+
+                var data = JsonSerializer.Deserialize<T>(
+                    raw,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                return new ApiResultDto<T>
+                {
+                    Data = data,
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            else
+            {
+                return new ApiResultDto<T>
+                {
+                    IsSuccess = true,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+        }
+        if (!response.IsSuccessStatusCode && raw != "")
+        {
+            var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return new ApiResultDto<T>
+            {
+                IsSuccess = false,
+                Error = errorMessage?.Error ?? "UnknownError",
+                StatusCode = (int)response.StatusCode
+            };
+        }
+
+        return new ApiResultDto<T>
+        {
+            IsSuccess = false,
+            Error = raw,
+            StatusCode = (int)response.StatusCode
+        };
+    }
+
+
+    protected Task<ApiResultDto<T>>
+        GetAsync<T>(string url, HttpContent? content = null) =>
+        SendGetRequestAsync<T>(url, content);
+
+
+    protected Task<ApiResultDto<T>>
+        PostAsync<T>(string url, HttpContent? content=null) =>
+        SendPostRequestAsync<T>(url, content);
+
+    protected Task<ApiResultDto<T>>
+        PutAsync<T>(string url, HttpContent content) =>
+        SendPutRequestAsync<T>(url, content);
+
+
+    protected Task<ApiResultDto<T>>
+        PatchAsync<T>(string url, HttpContent? content = null) =>
+        SendPatchRequestAsync<T>(url, content);
+
+
+    protected Task<ApiResultDto<T>>
+        DeleteAsync<T>(string url) =>
+        SendDeleteRequestAsync<T>(url);
+
+}
+public class ServerErrorDto
+{
+    public string? Error { get; set; }
+    public string? Description { get; set; }
+    public int? StatusCode { get; set; }
+}

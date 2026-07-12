@@ -1,0 +1,302 @@
+﻿/* === فونت و پایه === */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    font-family: "Vazirmatn", sans-serif;
+}
+
+/* === پس‌زمینه و مرکز صفحه === */
+body {
+    background: linear-gradient(135deg, #fff5f7, #f9f9f9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* === کانتینر ثبت‌نام === */
+.register-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* === کارت فرم === */
+.form-card {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(255, 182, 193, 0.25);
+    border-radius: 1.2rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #ffe4e6;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 auto;
+}
+
+    .form-card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 10px 35px rgba(255, 182, 193, 0.3);
+    }
+
+/* === هدر فرم === */
+.form-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+    .form-header .logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 4px solid #fbcfe8;
+        object-fit: cover;
+        box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+    }
+
+    .form-header h1,
+    .form-header h2 {
+        color: #e11d48;
+        margin-top: 1rem;
+        font-weight: 700;
+    }
+
+    .form-header p {
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+
+/* === فرم و ورودی‌ها === */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=tel] {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 0.8rem;
+    border: 1px solid #e5e7eb;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #fb7185;
+    box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.25);
+}
+
+/* === دکمه‌ها === */
+.btn,
+.login-button {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(to right, #fb7185, #ec4899);
+    color: #fff;
+    border: none;
+    border-radius: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(251, 113, 133, 0.3);
+}
+
+    .btn:hover,
+    .login-button:hover {
+        background: linear-gradient(to right, #f43f5e, #db2777);
+        transform: translateY(-2px);
+    }
+
+/* === پیام خطا === */
+.error-message,
+#error-register {
+    background-color: #fdecea;
+    border: 1px solid #f5c2c7;
+    color: #b02a37;
+    border-radius: 0.6rem;
+    padding: 0.7rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+/* === لینک‌ها === */
+.register-link,
+.other-links {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+    .register-link a,
+    .other-links a {
+        color: #e11d48;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .register-link a:hover,
+        .other-links a:hover {
+            text-decoration: underline;
+        }
+
+/* === OTP === */
+.otp-inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    direction: ltr;
+    margin: 1rem 0;
+    flex-wrap: nowrap;
+}
+
+.otp-box {
+    width: 50px;
+    height: 60px;
+    font-size: 24px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.2s ease;
+    direction: ltr;
+    font-family: "Vazirmatn", "Tahoma", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+    .otp-box:focus {
+        border-color: #fb7185;
+        box-shadow: 0 0 6px rgba(251, 113, 133, 0.3);
+    }
+
+/* === فرم مرحله‌ای === */
+.form-step {
+    display: none;
+}
+
+    .form-step.active {
+        display: block;
+    }
+
+/* === تایمر OTP === */
+#timer {
+    font-weight: 600;
+    color: #e11d48;
+    font-size: 1rem;
+}
+
+/* === واکنش‌گرایی موبایل پسند === */
+/* نسخه بهینه‌تر برای موبایل‌ها */
+/* === بهینه‌سازی نمایش در موبایل === */
+@media only screen and (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    .form-card {
+        width: 88%;
+        max-width: 340px;
+        padding: 1.3rem;
+        border-radius: 1rem;
+        margin: 0 auto;
+        transform: scale(0.9);
+    }
+
+    .form-header .logo {
+        width: 75px;
+        height: 75px;
+        border-width: 4px;
+    }
+
+    .form-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .form-header p {
+        font-size: 0.9rem;
+    }
+
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    input[type=tel] {
+        padding: 0.65rem;
+        font-size: 0.9rem;
+        border-radius: 0.6rem;
+    }
+
+    .btn,
+    .login-button {
+        padding: 0.8rem;
+        font-size: 1rem;
+        border-radius: 0.7rem;
+    }
+
+    /* === باکس‌های OTP === */
+    .otp-inputs {
+        gap: 6px;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+
+    .otp-box {
+        width: 38px;
+        height: 48px;
+        font-size: 8px; /* فونت عدد کوچکتر شد */
+        text-align: center;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .otp-box:focus {
+            border-color: #fb7185;
+            box-shadow: 0 0 5px rgba(251, 113, 133, 0.3);
+        }
+}
+
+/* برای گوشی‌های خیلی کوچک (عرض کمتر از 400px) */
+@media only screen and (max-width: 400px) {
+    .form-card {
+        width: 85%;
+        max-width: 320px;
+        padding: 1.1rem;
+        transform: scale(0.88);
+    }
+
+    .otp-box {
+        width: 36px;
+        height: 45px;
+        font-size: 8px; /* حتی کوچکتر برای جلوگیری از فشردگی */
+    }
+
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    input[type=tel] {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .btn,
+    .login-button {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+}

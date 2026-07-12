@@ -1,0 +1,145 @@
+﻿@page
+@model SaharBeautyWeb.Pages.UserPanels.Client.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+
+    var model = Model.SummaryModel;
+    var futureAppointment = model != null ? model.FutureAppointments.Count : 0;
+    var formerAppointment = model != null ? model.FormerAppointments.Count : 0;
+    ViewData["ActiveMenu"] = "Dashboard";
+}
+
+<link href="~/layout/admin/assets/css/pages/dashboard/dashboard.css" rel="stylesheet" />
+
+<div class="container-fluid py-4">
+
+    <!-- ======== خلاصه پروفایل ======== -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm text-center p-3">
+                @if (Model.UserInfo != null)
+                {
+
+                    @if (Model.UserInfo.Avatar != null)
+                    {
+                        <img src="@Model.UserInfo.Avatar.Url"
+                             alt="@Model.UserInfo.Name"
+                             class="rounded-circle mb-3"
+                             width="100"
+                             height="100">
+                    }
+                    <h5 class="fw-bold">@($"{Model.UserInfo.Name} {Model.UserInfo.LastName}")</h5>
+                    <p class="text-muted mb-1">شماره موبایل: @(Model.UserInfo.Mobile)</p>
+                    <p class="text-muted mb-2">عضویت از: @(Model.UserInfo.CreationDate)</p>
+                    <a href="/UserPanels/Client/Accounts/Index" class="btn btn-outline-primary btn-sm">ویرایش پروفایل</a>
+                }
+            </div>
+        </div>
+
+        <!-- کارت‌های خلاصه آماری -->
+        <div class="col-12 col-md-8 col-lg-8">
+            <div class="row g-3">
+                <div class="col-6 col-md-4">
+                    <div class="card summary-card shadow-sm text-center">
+                        <div class="card-body">
+                            <h6 class="text-muted">نوبت‌های آینده</h6>
+                            <h3>@futureAppointment</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="card summary-card shadow-sm text-center">
+                        <div class="card-body">
+                            <h6 class="text-muted">نوبت‌های قبل</h6>
+                            <h3>@formerAppointment</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="card summary-card shadow-sm text-center">
+                        <div class="card-body">
+                            <h6 class="text-muted">مجموع پرداخت‌ها</h6>
+                            <h3>0 تومان</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======== ثبت نوبت جدید ======== -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <a href="/UserPanels/Client/Appointment" class="btn btn-primary px-4 py-2 fs-5">
+                رزرو نوبت جدید 💅
+            </a>
+        </div>
+    </div>
+
+    <!-- ======== لیست نوبت‌ها ======== -->
+    <div class="row g-3">
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>نوبت‌های آینده</strong>
+                </div>
+                <div class="card-body">
+                    <div class="appointments-list">
+
+                        @if (model != null)
+                        {
+                            foreach (var item in model.FutureAppointments)
+                            {
+                            
+
+
+                                <div class="appointment-item">
+                                    <div class="appointment-info">
+                                        <span class="treatment-name">@item.TreatmentTitle</span>
+                                        <span class="appointment-date">@($"{item.Date}  {item.Day}") </span>
+                                        <span class="appointment-time">ساعت @item.Start</span>
+                                    </div>
+                                    <div class="appointment-meta">
+                                        <span class="status @($"status-{item.Status}")">@item.StatusString</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <strong>نوبت‌های گذشته</strong>
+                </div>
+                <div class="card-body">
+                    <div class="appointments-list">
+
+                        @if (model != null)
+                        {
+                            foreach (var item in model.FormerAppointments)
+                            {
+
+                                <div class="appointment-item">
+                                    <div class="appointment-info">
+                                        <span class="treatment-name">@item.TreatmentTitle</span>
+                                        <span class="appointment-date">@($"{item.Date}  {item.Day}") </span>
+                                        <span class="appointment-time">ساعت @item.Start</span>
+                                    </div>
+                                    <div class="appointment-meta">
+                                        <span class="status  @($"status-{item.Status}")">@item.StatusString</span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

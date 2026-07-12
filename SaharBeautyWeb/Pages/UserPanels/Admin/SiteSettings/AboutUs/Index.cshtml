@@ -1,0 +1,26 @@
+﻿@page "{handler?}"
+@model SaharBeautyWeb.Pages.UserPanels.Admin.SiteSettings.AboutUs.IndexModel
+@{
+    Layout = "_UserPanelLayout";
+    ViewData["ActiveMenu"] = "AboutUs";
+}
+@if (Model.ModelData == null)
+{
+    <partial name="_AddAboutUsPartial" model="Model?.AddAboutUsDto" />
+}
+else
+{
+    <partial name="_AboutUsDisplayPartial" model="Model.ModelData" />
+}
+
+@section Scripts {
+    <script>
+        var createAboutUs = '@Url.Page("Index", "CreateAboutUs")';
+        var getAboutUsForEdit = '@Url.Page("Index", "GetAboutUsForEdit")';
+        var applyEditAboutUs = '@Url.Page("Index","ApplyEditAboutUs")';
+        var getLogoByAboutUsId = '@Url.Page("Index","GetLogoById")';
+        var applyEditedaboutUsLogo = '@Url.Page("Index","ApplyEditedAboutUsLogo")';
+    </script>
+
+    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sitesettings/aboutus/aboutus.js"></script>
+}

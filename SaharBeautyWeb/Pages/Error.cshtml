@@ -1,0 +1,15 @@
+﻿ @page
+@model ErrorModel
+@{
+    ViewData["Title"] = "صفحه خطا";
+    Layout = "_AuthenticationLayout";
+}
+<link href="~/layout/css/error.css" rel="stylesheet" />
+
+
+<div class="error-box">
+    <h1>اوه! خطایی رخ داد 😞</h1>
+    <p>متأسفیم، مشکلی در پردازش درخواست شما پیش آمد. نگران نباشید، می‌توانید به صفحه اصلی بازگردید و دوباره امتحان کنید.</p>
+
+    <a href="/" class="btn-home">بازگشت به صفحه اصلی</a>
+</div>
