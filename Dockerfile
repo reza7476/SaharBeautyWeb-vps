@@ -1,21 +1,25 @@
+# Build Stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 as reza-builder
-
-WORKDIR /docker-src
+COPY ["SaharBeautyWeb/SaharBeautyWeb.csproj", "SaharBeautyWeb/"]
+RUN dotnet restore "SaharBeautyWeb/SaharBeautyWeb.csproj"
 
 COPY . .
+WORKDIR "/src/SaharBeautyWeb"
 
-RUN dotnet restore
+RUN dotnet publish "SaharBeautyWeb.csproj" \
+    -c Release \
+    -o /app/publish \
+    /p:UseAppHost=false
 
-RUN dotnet publish -c Release -o /publish
+# Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS reza-runtime
+COPY --from=build /app/publish .
 
-WORKDIR /docker-app
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
-COPY --from=reza-builder /publish .
-
-EXPOSE 8080 
-
-ENTRYPOINT ["dotnet","SaharBeautyWeb.dll"]
+ENTRYPOINT ["dotnet", "SaharBeautyWeb.dll"]
