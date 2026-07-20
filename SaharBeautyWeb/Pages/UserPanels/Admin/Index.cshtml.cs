@@ -59,23 +59,23 @@ public class IndexModel : AjaxBasePageModel
         {
             var response = HandleApiResult(appointmentPerDay);
         }
-      
-        var weeklySchedule = await _weeklySchedule.GetSchedules();
-        if (weeklySchedule.IsSuccess && weeklySchedule.Data != null)
-        {
-            WeeklySchedule = weeklySchedule.Data.Select(_ => new GetWeeklyScheduleDashboardModel()
-            {
-                Day = _.DayOfWeek.ConvertDayWeekToPersianDay(),
-                Start = TimeOnly.FromDateTime(_.StartTime).ToString(),
-                End = TimeOnly.FromDateTime(_.EndTime).ToString(),
-                IsActive = _.IsActive
 
-            }).ToList();
-        }
-        else
-        {
-            var response= HandleApiResult(weeklySchedule);
-        }
+        //var weeklySchedule = await _weeklySchedule.GetSchedules();
+        //if (weeklySchedule.IsSuccess && weeklySchedule.Data != null)
+        //{
+        //    WeeklySchedule = weeklySchedule.Data.Select(_ => new GetWeeklyScheduleDashboardModel()
+        //    {
+        //        Day = _.DayOfWeek.ConvertDayWeekToPersianDay(),
+        //        Start = _.StartTime.ToString(),
+        //        End = _.EndTime.ToString(),
+        //        IsActive = _.IsActive
+
+        //    }).ToList();
+        //}
+        //else
+        //{
+        //    var response = HandleApiResult(weeklySchedule);
+        //}
 
         var popularTreatments = await _treatmentService.GetPopularTreatments();
         if (popularTreatments.IsSuccess && popularTreatments.Data != null)
@@ -96,7 +96,7 @@ public class IndexModel : AjaxBasePageModel
         }
         else
         {
-            var response=HandleApiResult(popularTreatments);
+            var response = HandleApiResult(popularTreatments);
         }
 
 
@@ -128,7 +128,7 @@ public class IndexModel : AjaxBasePageModel
                 Mobile = _.Mobile,
                 StatusString = StringExtension.ConvertAppointmentStatusToString(_.Status),
                 TreatmentTitle = _.TreatmentTitle,
-                Status=_.Status
+                Status = _.Status
             }).ToList();
         }
         else

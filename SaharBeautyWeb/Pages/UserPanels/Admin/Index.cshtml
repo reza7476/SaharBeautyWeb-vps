@@ -5,7 +5,7 @@
     Layout = "_UserPanelLayout";
     ViewData["ActiveMenu"] = "Dashboard";
 }
-<link href="~/layout/admin/assets/css/pages/dashboard/dashboard.css" rel="stylesheet" />
+<link href="~/Layout/Admin/assets/css/Pages/dashboard/dashboard.css" rel="stylesheet" />
 
 <div class="container-fluid py-4">
 
@@ -183,5 +183,5 @@
         const labels = @Html.Raw(JsonSerializer.Serialize(Model.AppointmentsPerDay.Select(_ => _.DayWeek).ToList()));
         const data = @Html.Raw(JsonSerializer.Serialize(Model.AppointmentsPerDay.Select(_ => _.Count).ToList()));
     </script>
-    <script src="~/layout/admin/assets/js/pages/userpanels/admin/dashboard/dashboard.js"></script>
+    <script src="~/Layout/Admin/assets/js/pages/UserPanels/Admin/Dashboard/dashboard.js"></script>
 }

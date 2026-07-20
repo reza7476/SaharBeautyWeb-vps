@@ -5,7 +5,7 @@
     Layout = "_UserPanelLayout";
     ViewData["ActiveMenu"] = "Banners";
 }
-<link href="~/layout/admin/assets/css/pages/banners/indexbannerstyle.css" rel="stylesheet" />
+<link href="~/Layout/Admin/assets/css/Pages/Banners/IndexBannerStyle.css" rel="stylesheet" />
 
 @if (Model.Banner != null)
 {
@@ -34,7 +34,7 @@ else
 }
 
 @section Scripts {
-    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sitesettings/banners/bannerjquery.js"></script>
+    <script src="~/Layout/Admin/assets/js/pages/UserPanels/Admin/SiteSettings/Banners/BannerJquery.js"></script>
 
     <script>
         var createBanner = '@Url.Page("Index", "CreateBanner")';
