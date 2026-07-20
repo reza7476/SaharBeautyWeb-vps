@@ -51,8 +51,12 @@ public class IndexModel : AjaxBasePageModel
     public async Task<IActionResult> OnPostSaveNewSchedule()
     {
 
-        var start = DateTime.Today.Add(TimeSpan.Parse(NewSchedule.StartTime));
-        var end = DateTime.Today.Add(TimeSpan.Parse(NewSchedule.EndTime));
+        //var start = DateTime.UtcNow.Add(TimeSpan.Parse(NewSchedule.StartTime));
+        //var end = DateTime.UtcNow.Add(TimeSpan.Parse(NewSchedule.EndTime));
+        var start = TimeSpan.Parse(NewSchedule.StartTime);
+        var end = TimeSpan.Parse(NewSchedule.EndTime);
+        
+        
         if (NewSchedule.Id == 0)
         {
             var newSchedule = await _services.Add(new AddNewScheduleDto()

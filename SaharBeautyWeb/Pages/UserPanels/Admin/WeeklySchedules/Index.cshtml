@@ -5,7 +5,7 @@
     ViewData["ActiveMenu"] = "WeeklySchedules";
 }
 
-<link href="~/layout/admin/assets/css/pages/weeklyschedules/style.css" rel="stylesheet" />
+<link href="~/Layout/Admin/assets/css/Pages/WeeklySchedules/style.css" rel="stylesheet" />
 
     <div class="weekly-schedule-container">
         <h2>ساعات کاری</h2>
@@ -46,13 +46,13 @@
                         <td>
                             <input type="time"
                                    class="start-time"
-                                   value="@(schedule != null ? schedule.StartTime.ToString("HH:mm") : "")" />
+                                   value="@(schedule?.StartTime.ToString("HH':'mm"))" />
                         </td>
 
                         <td>
                             <input type="time"
                                    class="end-time"
-                                   value="@(schedule != null ? schedule.EndTime.ToString("HH:mm") : "")" />
+                               value="@(schedule?.EndTime.ToString("HH':'mm") )" />
                         </td>
 
                         <td>
@@ -75,5 +75,5 @@
     <script>
         var saveNewSchedule = '@Url.Page("Index", "SaveNewSchedule")';
     </script>
-    <script src="~/layout/admin/assets/js/pages/userpanels/admin/weeklyschedules/schedule.js"></script>
+    <script src="~/Layout/Admin/assets/js/pages/UserPanels/Admin/WeeklySchedules/schedule.js"></script>
 }

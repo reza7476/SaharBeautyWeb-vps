@@ -147,7 +147,8 @@ public class UserPanelBaseService
                     StatusCode = (int)response.StatusCode
                 };
             }
-        }if(!response.IsSuccessStatusCode && raw != "")
+        }
+        if (!response.IsSuccessStatusCode && raw != "")
         {
             var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
             {
@@ -209,7 +210,8 @@ public class UserPanelBaseService
                     StatusCode = (int)response.StatusCode
                 };
             }
-        }if(!response.IsSuccessStatusCode && raw!="") 
+        }
+        if (!response.IsSuccessStatusCode && raw != "")
         {
             var errorMessage = JsonSerializer.Deserialize<ServerErrorDto>(raw, new JsonSerializerOptions()
             {
@@ -292,7 +294,7 @@ public class UserPanelBaseService
 
 
     protected Task<ApiResultDto<T>>
-        PostAsync<T>(string url, HttpContent? content=null) =>
+        PostAsync<T>(string url, HttpContent? content = null) =>
         SendPostRequestAsync<T>(url, content);
 
     protected Task<ApiResultDto<T>>

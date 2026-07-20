@@ -4,7 +4,7 @@
     Layout = "_UserPanelLayout";
     ViewData["ActiveMenu"] = "WhyUs";
 }
-<link href="~/layout/admin/assets/css/pages/whyussections/whyussectionstyle.css" rel="stylesheet" />
+<link href="~/Layout/Admin/assets/css/Pages/WhyUsSections/WhyUsSectionStyle.css" rel="stylesheet" />
 <!-- بخش ویرایش یا افزودن بخش "چرا ما" -->
 @if (Model.ModelData != null)
 {
@@ -65,5 +65,5 @@ else
         var applyEditWhyUsImage = '@Url.Page("Index", "ApplyEditWhyUsImage")';
     </script>
 
-    <script src="~/layout/admin/assets/js/pages/userpanels/admin/sitesettings/whyusquestions/whyussection.js"></script>
+    <script src="~/Layout/Admin/assets/js/pages/UserPanels/Admin/SiteSettings/WhyUsQuestions/WhyUsSection.js"></script>
 }
