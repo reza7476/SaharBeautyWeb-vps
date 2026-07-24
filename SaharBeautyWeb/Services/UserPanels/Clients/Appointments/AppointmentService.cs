@@ -24,7 +24,7 @@ public class AppointmentService : UserPanelBaseService, IAppointmentService
         {
             dto.TreatmentId,
             dto.Duration,
-            dto.AppointmentDate,
+            AppointmentDate=DateTime.SpecifyKind(dto.AppointmentDate.Value, DateTimeKind.Utc),
             dto.DayWeek
         });
 
