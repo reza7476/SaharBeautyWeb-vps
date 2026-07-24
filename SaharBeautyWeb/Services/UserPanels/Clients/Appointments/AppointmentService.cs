@@ -42,7 +42,7 @@ public class AppointmentService : UserPanelBaseService, IAppointmentService
             dto.ClientId,
             dto.Duration,
             dto.TreatmentId,
-            dto.AppointmentDate,
+            AppointmentDate = DateTime.SpecifyKind(dto.AppointmentDate.Value, DateTimeKind.Utc),
             dto.DayWeek
         });
         using var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -299,13 +299,9 @@ public class AppointmentService : UserPanelBaseService, IAppointmentService
 
     public async Task<ApiResultDto<List<GetBookedAppointmentByDateDto>>> GetBookedByDate(DateTime dateTime)
     {
-        var url = $"{_apiUrl}/booked-appointment";
-
-        var content = new MultipartFormDataContent();
-        content.Add(new StringContent(dateTime.ToString() ?? ""), "date");
-
-
-        var result = await GetAsync<List<GetBookedAppointmentByDateDto>>(url, content);
+        dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+        var url = $"{_apiUrl}/{Uri.EscapeDataString(dateTime.ToString("O"))}/booked-appointment";
+        var result = await GetAsync<List<GetBookedAppointmentByDateDto>>(url);
         return result;
     }
 
