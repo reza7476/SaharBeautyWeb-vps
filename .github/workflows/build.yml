@@ -50,3 +50,23 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ghcr.io/reza7476/saharbeautyweb:latest
+          
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
+              -u "${{ secrets.GHCR_USERNAME }}" \
+              --password-stdin
+
+            cd /opt/docker/services/sahar-web
+
+            docker compose pull
+
+            docker compose up -d
+
+            docker image prune -f    
